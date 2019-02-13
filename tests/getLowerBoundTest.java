@@ -1,9 +1,10 @@
 package org.jfree.data.test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+
 import org.jfree.data.Range;
-import org.junit.*;
-import static org.junit.Assert.*;
-import org.jfree.data.Range;
+import org.junit.Before;
+import org.junit.Test;
 
 public class getLowerBoundTest {
 	

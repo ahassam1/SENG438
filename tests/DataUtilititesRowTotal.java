@@ -1,6 +1,6 @@
 package org.jfree.data.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.security.InvalidParameterException;
 
