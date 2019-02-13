@@ -1,6 +1,9 @@
 package org.jfree.data.test;
 
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.jfree.data.DataUtilities;
@@ -15,9 +18,9 @@ public class createNumberArray2DTest {
 							  {1, 0, 1},
 							  {0, 1, 0}};
 	
-	private Number expected[][] = {{0, 1, 0},
-								   {1, 0, 1},
-								   {0, 1, 0}};
+	private Number expected[][] = {{0.0, 1.0, 0.0},
+								   {1.0, 0.0, 1.0},
+								   {0.0, 1.0, 0.0}};
 	
 	private double emptyData[][] = {};
 	
@@ -46,8 +49,16 @@ public class createNumberArray2DTest {
 	@Test
 	public void testExpectedArray()
 	{
-		boolean result = expected.equals(realDataTest);
+		boolean result = Arrays.equals(expected, realDataTest);
+		System.out.println(result);
+		for(int i = 0; i < 3; i++)
+			for(int i1 =0; i1 < 3; i1++)
+			{
+				System.out.println(realDataTest[i][i1]);
+			}
 		assertTrue(result);
+		
 	}
+
 	
 }
