@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.security.InvalidParameterException;
-
 import org.jfree.data.DataUtilities;
 import org.jfree.data.KeyedValues;
 import org.jmock.Expectations;
