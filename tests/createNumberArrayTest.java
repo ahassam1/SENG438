@@ -1,9 +1,11 @@
 package org.jfree.data.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.jfree.data.DataUtilities;
 import org.junit.Before;
 import org.junit.Test;
-import org.jfree.data.DataUtilities;
 
 public class createNumberArrayTest {
 

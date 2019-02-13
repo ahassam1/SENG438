@@ -1,12 +1,18 @@
 package org.jfree.data.test;
 
+<<<<<<< HEAD
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
+=======
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.jfree.data.DataUtilities;
+>>>>>>> d18c88134ff800a194bae743a5ccd3cbf9cdb847
 import org.junit.Before;
 import org.junit.Test;
-import org.jfree.data.DataUtilities;
 
 public class createNumberArray2DTest {
 
