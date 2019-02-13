@@ -1,5 +1,4 @@
 package org.jfree.data.test;
-import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
 import org.jfree.data.Range;
 import org.junit.*;
@@ -22,7 +21,8 @@ public class getLowerBoundTest {
 	@Test
 	public void normalInputTest()
 	{
-		exampleRange.getLowerBound();
+		assertEquals("The lowerbound should be -1",
+				-1, exampleRange.getLowerBound(), .000000001d);
 	}
 
 	@Test(expected=NullPointerException.class)
@@ -32,7 +32,9 @@ public class getLowerBoundTest {
 	@Test
 	public void sameBoundTest()
 	{
-		exampleRange3.getLowerBound();
+		assertEquals("The lowerbound should be 0",
+				0, exampleRange3.getLowerBound(), .000000001d);
+
 	}
 
 }

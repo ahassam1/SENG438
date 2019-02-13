@@ -1,5 +1,4 @@
 package org.jfree.data.test;
-import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
 import org.jfree.data.Range;
 import org.junit.*;
@@ -22,7 +21,8 @@ public class getUpperBoundTest {
 	@Test
 	public void normalInputTest()
 	{
-		exampleRange.getUpperBound();
+		assertEquals("The upperbound should be 1",
+				1, exampleRange.getUpperBound(), .000000001d);
 	}
 
 	@Test(expected=NullPointerException.class)
@@ -32,7 +32,10 @@ public class getUpperBoundTest {
 	@Test
 	public void sameBoundTest()
 	{
-		exampleRange3.getUpperBound();
+		assertEquals("The upperbound should be 0",
+				0, exampleRange3.getUpperBound(), .000000001d);
 	}
+	
+	
 
 }

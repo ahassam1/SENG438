@@ -15,6 +15,10 @@ public class createNumberArray2DTest {
 							  {1, 0, 1},
 							  {0, 1, 0}};
 	
+	private Number expected[][] = {{0, 1, 0},
+								   {1, 0, 1},
+								   {0, 1, 0}};
+	
 	private double emptyData[][] = {};
 	
 	private double nullData[][];
@@ -38,6 +42,12 @@ public class createNumberArray2DTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void testNullData() {
 		nullDataTest = DataUtilities.createNumberArray2D(nullData);
+	}
+	@Test
+	public void testExpectedArray()
+	{
+		boolean result = expected.equals(realDataTest);
+		assertTrue(result);
 	}
 	
 }
