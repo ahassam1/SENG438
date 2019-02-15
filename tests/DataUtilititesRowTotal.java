@@ -1,6 +1,6 @@
 package org.jfree.data.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.security.InvalidParameterException;
 
@@ -63,48 +63,49 @@ public class DataUtilititesRowTotal {
 			}
 		});
 	}
-	
+	//Testing row 0's total (lower bound)
 	@Test
 	public void Row0() {
 		double result = DataUtilities.calculateRowTotal(values, 0);
 		assertEquals("Row 0 should have a total of 20", 20, result, 0.00001d);
 	}
 	
-	
+	//Testing row 1's total (central value of allowed rows)
 	@Test
 	public void nominalRow() {
 		double result = DataUtilities.calculateRowTotal(values, 1);
 		assertEquals("Row 1 should have a total of 30", 30, result, 0.00001d);
 	}
-	
+	//Testing row -1's total (should return 0 since there is no row -1)
 	@Test
 	public void RowMinus1() {
 		double result = DataUtilities.calculateRowTotal(values, -1);
 		assertEquals("Row -1 should return 0 since invalid input", 0, result, 0.00001d);
 	}
 	
-	
+	//Testing row 2's total (upper bound)
 	@Test
 	public void Row2() {
 		double result = DataUtilities.calculateRowTotal(values, 2);
 		assertEquals("Row 2 should have a total of 9", 9, result, 0.00001d);
 	}
-	
+	//Testing row 3's total (should return 0 since there is no row 3 in the given values2D object)
 	@Test
 	public void Row3() {
 		double result = DataUtilities.calculateRowTotal(values, 3);
 		assertEquals("Row 3 should have a total of 0 due to out of bounds(invalid input)", 0, result, 0.00001d);
 	}
 	
-	
-	@Test (expected = InvalidParameterException.class)
+	//Testing an invalid Values2D object
+	@Test 
 	public void RowNullData() {
-		double result = DataUtilities.calculateRowTotal(null, 0);
-		assertEquals("Null data should throw an exception", 20, result, 0.00001d);
+		try {
+			DataUtilities.calculateRowTotal(null, 0);
+		}
+		catch(Exception e) {
+			assertEquals("An invalid parameter exception should be thrown", InvalidParameterException.class, e.getClass());
+		}
+		
 	}
-	
-	
-
-
-
 }
+
