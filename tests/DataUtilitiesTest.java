@@ -1,4 +1,4 @@
-package org.jfree.data.test;
+package org.jfree.data;
 
 import static org.junit.Assert.*;
 
@@ -222,10 +222,17 @@ public class DataUtilitiesTest {
 	}
 	
 	//Testing an invalid values2D object
-	@Test(expected=InvalidParameterException.class)
+	@Test(expected=Error.class)
 	public void testCalculateColumnTotalNullData() {
-		DataUtilities.calculateColumnTotal(null, 0);
-		fail("Test should not get to this point.");	
+		try {
+			DataUtilities.calculateColumnTotal(null, 0);
+			fail("Test should throw exception and not get to this point.");
+		} catch (Exception e) {
+			if (e.getClass() != InvalidParameterException.class) {
+				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
+				assertFalse(error, true);
+			}
+		}
 	}
 	
 	/* calculateRowTotal() tests */
@@ -266,10 +273,17 @@ public class DataUtilitiesTest {
 	}
 	
 	//Testing an invalid Values2D object
-	@Test(expected=InvalidParameterException.class)
+	@Test(expected=Error.class)
 	public void testCalculateRowTotalRowNullData() {
-		DataUtilities.calculateRowTotal(null, 0);
-		fail("Test should not get to this point.");
+		try {
+			DataUtilities.calculateRowTotal(null, 0);
+			fail("Test should not get to this point.");
+		} catch (Exception e) {
+			if (e.getClass() != InvalidParameterException.class) {
+				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
+				assertFalse(error, true);
+			}
+		}
 	}
 	
 	/* createNumberArray() tests */
@@ -348,9 +362,16 @@ public class DataUtilitiesTest {
 		assertEquals(0, result.getItemCount());
 	}
 	
-	@Test (expected = InvalidParameterException.class)
+	@Test (expected = Error.class)
 	public void testGetCumulativePercentagesNullData() {
-		DataUtilities.getCumulativePercentages(null);
-		fail("Test should not get to this point.");
+		try {
+			DataUtilities.getCumulativePercentages(null);
+			fail("Test should not get to this point.");
+		} catch (Exception e) {
+			if (e.getClass() != InvalidParameterException.class) {
+				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
+				assertFalse(error, true);
+			}
+		}
 	}
 }
