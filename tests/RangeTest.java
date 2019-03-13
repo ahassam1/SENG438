@@ -2,8 +2,6 @@ package org.jfree.data;
 
 import static org.junit.Assert.*;
 
-import java.security.InvalidParameterException;
-
 import org.jfree.data.Range;
 import org.junit.*;
 
@@ -18,16 +16,12 @@ public class RangeTest{
 	private Range testRange1;
 	private Range testRange2;
 	private Range testRange3;
-	private Range testRange4;
-	private Range testRange5;
 	
 	@Before
 	public void setUp() throws Exception {
 		testRange1 = new Range(-1, 1);
-		testRange2 = new Range(-1, 1);
-		testRange3 = new Range(-1, 1);
-		testRange4 = new Range(-2, 2);
-		testRange5 = new Range(4, 8);
+		testRange2 = new Range(-2, 2);
+		testRange3 = new Range(4, 8);
 		
 		boundRange = new Range(-1, 1);
 		boundRange2 = null;
@@ -41,7 +35,7 @@ public class RangeTest{
 	@Test
 	public void testConstructorNormalInput() {
 		Range temp = new Range(-1, 1);
-		assertEquals("The Ranges should match", temp, testRange1);
+		assertEquals("The Ranges should match", testRange1, temp);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -128,12 +122,12 @@ public class RangeTest{
 	
 	@Test
 	public void testGetLengthTrue() {
-		assertEquals(testRange1.getLength(), testRange2.getLength(), 0);
+		assertEquals(testRange1.getLength(), 0, testRange1.getLength());
 	}
 	
 	@Test
 	public void testGetLengthFalse() {
-		assertNotSame(testRange3.getLength(), testRange4.getLength());
+		assertNotSame(testRange1.getLength(), testRange2.getLength());
 	}
 	
 	@Test
@@ -152,27 +146,51 @@ public class RangeTest{
 	@Test
 	public void testContainsBelowLowerBound() {
 		boolean result = testRange1.contains(-2);
-		assertEquals("The value of -2 should not be in range.", result, false);
+		assertEquals("The value of -2 should not be in range.", false, result);
 	}
 	
 	@Test
 	public void testContainsWithinBound() {
 		boolean result = testRange1.contains(0);
-		assertEquals("The value of 0 should be in range.", result, true);
+		assertEquals("The value of 0 should be in range.", true, result);
 	}
 	
 	@Test
 	public void testContainsAboveUpperBound() {
 		boolean result = testRange1.contains(2);
-		assertEquals("The value of 2 should not be in range.", result, false);
+		assertEquals("The value of 2 should not be in range.", false, result);
 	}
 	
 	/* intersects() tests */
 	
 	@Test
-	public void testIntersects() {
-		boolean result = testRange4.intersects(-1, 1);
-		assertEquals("The ranges should intersect.", result, true);
+	public void testIntersectsPointLowerGreaterThan() {
+		boolean result = testRange2.intersects(-1, 1);
+		assertEquals("The ranges should intersect.", true, result);
+	}
+	
+	@Test
+	public void testIntersectsPointLowerLessThan() {
+		boolean result = testRange2.intersects(-3, 1);
+		assertEquals("The ranges should intersect.", true, result);
+	}
+	
+	@Test
+	public void testIntersectsPointMixedUp() {
+		boolean result = testRange2.intersects(1, -1);
+		assertEquals("The ranges shouldn't intersect.", false, result);
+	}
+	
+	@Test
+	public void testIntersectsPointGreaterThan() {
+		boolean result = testRange2.intersects(3, 3);
+		assertEquals("The ranges shouldn't intersect.", false, result);
+	}
+	
+	@Test
+	public void testIntersectsPointLessThan() {
+		boolean result = testRange2.intersects(-3, -3);
+		assertEquals("The ranges shouldn't intersect.", false, result);
 	}
 	
 	/* constrain() tests */
@@ -184,23 +202,29 @@ public class RangeTest{
 	}
 	
 	@Test
+	public void testConstrainAboveUpperBound() {
+		double result = testRange1.constrain(2);
+		assertEquals("Result should be 1.", 1, result, 0);
+	}
+	
+	@Test
 	public void testConstrainBelowLowerBound() {
 		double result = testRange1.constrain(-2);
 		assertEquals("Result should be -1.", -1, result, 0);
 	}
 	
 	@Test
-	public void testConstrainAboveUpperBound() {
-		double result = testRange1.constrain(2);
-		assertEquals("Result should be 1.", 1, result, 0);
+	public void testConstrainNaN() {
+		double result = testRange1.constrain(Double.NaN);
+		assertEquals("Result should be Nan.", Double.NaN, result, 0);
 	}
 	
 	/* combine() tests */
 	
 	@Test
 	public void testCombineRange1Null() {
-		Range result = Range.combine(null, testRange5);
-		assertEquals("Should get testRange5.", testRange5, result);
+		Range result = Range.combine(null, testRange3);
+		assertEquals("Should get testRange5.", testRange3, result);
 	}
 	
 	@Test
@@ -212,7 +236,7 @@ public class RangeTest{
 	@Test
 	public void testCombine() {
 		Range expected = new Range(-1, 8);
-		Range result = Range.combine(testRange1, testRange5);
+		Range result = Range.combine(testRange1, testRange3);
 		assertEquals("Should get Range(-1, 8).", expected, result);
 	}
 	
@@ -305,22 +329,23 @@ public class RangeTest{
 	
 	@Test
 	public void testEqualsTrue() {
-		assertTrue(testRange1.equals(testRange2));
+		assertTrue(testRange1.equals(testRange1));
 	}
 	
 	@Test 
 	public void testEqualsFalse() {
-		assertFalse(testRange3.equals(testRange4));
-	}
-	
-	@Test
-	public void testEqualsSelf() {
-		assertTrue(testRange1.equals(testRange1));
+		assertFalse(testRange3.equals(testRange2));
 	}
 	
 	@Test
 	public void testEqualsNull() {
 		assertFalse(testRange1.equals(null));
+	}
+	
+	@Test
+	public void testEqualsUpperBoundEquality() {
+		Range temp = new Range(-1, 2);
+		assertTrue(testRange1.equals(temp));
 	}
 	
 	/* hashCode() tests */

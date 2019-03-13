@@ -2,9 +2,6 @@ package org.jfree.data;
 
 import static org.junit.Assert.*;
 
-import java.security.InvalidParameterException;
-import java.util.Arrays;
-
 import org.jfree.data.DataUtilities;
 import org.jfree.data.KeyedValues;
 import org.jfree.data.Values2D;
@@ -21,35 +18,16 @@ public class DataUtilitiesTest {
 	// calculateRowTotal() values
 	private Values2D rowValues;
 	private Mockery rowMockingContext;
-	
-	// createNumberArray() values
-	private Number[] arrayRealDataTest;
-	private Number[] arrayEmptyDataTest;
-	private Number[] arrayExpected = {0, 1, 2, 3, 4, 5};
-	
-	private double arrayData[] = {0, 1, 2, 3, 4, 5};
-	private double arrayEmptyData[] = {};
-	private double arrayNullData[];
-	
-	private Number[][] array2DRealDataTest;
-	private Number[][] array2DEmptyDataTest;
-	private Number array2DExpected[][] = {{0.0, 1.0, 0.0},
-										  {1.0, 0.0, 1.0},
-										  {0.0, 1.0, 0.0}};
-	
-	// createNumberArray2D() values
-	private double array2DData[][] = {{0, 1, 0},
-							  		  {1, 0, 1},
-							  		  {0, 1, 0}};
-	private double array2DEmptyData[][] = {};
-	private double array2DNullData[][];
+
 	
 	// getCumulativePercentages() values
 	private KeyedValues cumulativeValues;
 	private KeyedValues cumulativeEmpty;
+	private KeyedValues cumulativeNullValue;
 	
 	private Mockery cumulativeMockingContext;
 	private Mockery cumulativeEmptyContext;
+	private Mockery cumulativeNullValueContext;
 	
 	@Before
 	public void setup() throws Exception{
@@ -84,18 +62,18 @@ public class DataUtilitiesTest {
 				will(returnValue(4));
 				//column -1 (testing exterior boundaries)
 				allowing(columnValues).getValue(0,-1);
-				will(returnValue(1));
+				will(returnValue(null));
 				allowing(columnValues).getValue(1,-1);
-				will(returnValue(1));
+				will(returnValue(null));
 				allowing(columnValues).getValue(2,-1);
-				will(returnValue(1));
+				will(returnValue(null));
 				//column 3 (testing exterior boundaries)
 				allowing(columnValues).getValue(0,3);
-				will(returnValue(4));
+				will(returnValue(null));
 				allowing(columnValues).getValue(1,3);
-				will(returnValue(4));
+				will(returnValue(null));
 				allowing(columnValues).getValue(2,3);
-				will(returnValue(4));
+				will(returnValue(null));
 			}
 		});
 		
@@ -130,26 +108,20 @@ public class DataUtilitiesTest {
 				will(returnValue(4));
 				//row -1 (testing exterior boundaries)
 				allowing(rowValues).getValue(-1,0);
-				will(returnValue(1));
+				will(returnValue(null));
 				allowing(rowValues).getValue(-1,1);
-				will(returnValue(1));
+				will(returnValue(null));
 				allowing(rowValues).getValue(-1,2);
-				will(returnValue(1));
+				will(returnValue(null));
 				//row 3 (testing exterior boundaries)
 				allowing(rowValues).getValue(3,0);
-				will(returnValue(4));
+				will(returnValue(null));
 				allowing(rowValues).getValue(3,1);
-				will(returnValue(4));
+				will(returnValue(null));
 				allowing(rowValues).getValue(3,2);
-				will(returnValue(4));
+				will(returnValue(null));
 			}
 		});
-		
-		arrayRealDataTest = DataUtilities.createNumberArray(arrayData);
-		arrayEmptyDataTest = DataUtilities.createNumberArray(arrayEmptyData);
-		
-		array2DRealDataTest = DataUtilities.createNumberArray2D(array2DData);
-		array2DEmptyDataTest = DataUtilities.createNumberArray2D(array2DEmptyData);
 		
 		cumulativeMockingContext = new Mockery();
 		cumulativeValues = cumulativeMockingContext.mock(KeyedValues.class);
@@ -172,6 +144,11 @@ public class DataUtilitiesTest {
 				will(returnValue(2));
 				allowing(cumulativeValues).getValue(2);
 				will(returnValue(2));
+				
+				allowing(cumulativeValues).getKey(2);
+				will(returnValue(2));
+				allowing(cumulativeValues).getValue(2);
+				will(returnValue(2));
 			}
 		});
 		
@@ -181,6 +158,20 @@ public class DataUtilitiesTest {
 			{
 				allowing(cumulativeEmpty).getItemCount();
 				will(returnValue(0));
+			}
+		});
+		
+		cumulativeNullValueContext = new Mockery();
+		cumulativeNullValue = cumulativeNullValueContext.mock(KeyedValues.class);
+		cumulativeNullValueContext.checking(new Expectations() {
+			{
+				allowing(cumulativeNullValue).getItemCount();
+				will(returnValue(1));
+				
+				allowing(cumulativeNullValue).getKey(0);
+				will(returnValue(0));
+				allowing(cumulativeNullValue).getValue(0);
+				will(returnValue(null));
 			}
 		});
 	}
@@ -214,6 +205,7 @@ public class DataUtilitiesTest {
 		double result = DataUtilities.calculateColumnTotal(columnValues, 2);
 		assertEquals("Column 2 should have a total of 9", 9, result, 0.00001d);
 	}
+	
 	//Testing column 3's total, should return 0 since there are only 3 columns in the mocked object
 	@Test
 	public void testCalculateColumnTotalColumn3() {
@@ -222,17 +214,10 @@ public class DataUtilitiesTest {
 	}
 	
 	//Testing an invalid values2D object
-	@Test(expected=Error.class)
+	@Test(expected=NullPointerException.class)
 	public void testCalculateColumnTotalNullData() {
-		try {
-			DataUtilities.calculateColumnTotal(null, 0);
-			fail("Test should throw exception and not get to this point.");
-		} catch (Exception e) {
-			if (e.getClass() != InvalidParameterException.class) {
-				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
-				assertFalse(error, true);
-			}
-		}
+		DataUtilities.calculateColumnTotal(null, 0);
+		fail("Test should throw exception and not get to this point.");
 	}
 	
 	/* calculateRowTotal() tests */
@@ -273,68 +258,68 @@ public class DataUtilitiesTest {
 	}
 	
 	//Testing an invalid Values2D object
-	@Test(expected=Error.class)
+	@Test(expected=NullPointerException.class)
 	public void testCalculateRowTotalRowNullData() {
-		try {
-			DataUtilities.calculateRowTotal(null, 0);
-			fail("Test should not get to this point.");
-		} catch (Exception e) {
-			if (e.getClass() != InvalidParameterException.class) {
-				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
-				assertFalse(error, true);
-			}
-		}
+		DataUtilities.calculateRowTotal(null, 0);
+		fail("Test should not get to this point.");
 	}
 	
 	/* createNumberArray() tests */
 	
 	@Test
 	public void testCreateNumberArrayRealData() {
-		assertNotNull(arrayRealDataTest);
+		double data[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+		Number result[] = DataUtilities.createNumberArray(data);
+		Number expected[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+		assertArrayEquals("Arrays should be equal", expected, result);
 	}
 	
 	@Test
 	public void testCreateNumberArrayEmptyData() {
-		assertNotNull(arrayEmptyDataTest);
+		double empty[] = {};
+		Number result[] = DataUtilities.createNumberArray(empty);
+		assertEquals(0, result.length);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testCreateNumberArrayNullData() {
-		DataUtilities.createNumberArray(arrayNullData);
+		DataUtilities.createNumberArray(null);
 		fail("Test should not get to this point.");
-	}
-	
-	@Test
-	public void testCreateNumberArrayExpectedArray() {
-		boolean result = arrayExpected.equals(arrayRealDataTest);
-		assertTrue(result);
 	}
 	
 	/* createNumberArray2D() */
 	
 	@Test
 	public void testCreateNumberArray2DRealData() {
-		assertNotNull(array2DRealDataTest);
+		double data[][] = {
+				{0, 1, 0}, 
+				{1, 0, 1}, 
+				{0, 1, 0}
+		};
+		Number expected[][] = {
+				{0.0, 1.0, 0.0},
+				{1.0, 0.0, 1.0},
+				{0.0, 1.0, 0.0}
+		};
+		Number result[][] = DataUtilities.createNumberArray2D(data);
+		assertArrayEquals("Arrays should be equal", expected, result);
 	}
 	
 	@Test
 	public void testCreateNumberArray2DEmptyData() {
-		assertNotNull(array2DEmptyDataTest);
+		double[][] empty = {};
+		Number[][] result = DataUtilities.createNumberArray2D(empty);
+		assertEquals(0, result.length);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testCreateNumberArray2DNullData() {
-		DataUtilities.createNumberArray2D(array2DNullData);
+		DataUtilities.createNumberArray2D(null);
 		fail("Test should not get to this point.");
 	}
 	
-	@Test
-	public void testCreateNumberArray2DExpectedArray() {
-		boolean result = Arrays.equals(array2DExpected, array2DRealDataTest);
-		assertTrue(result);
-	}
-	
 	/* getCumulativePercentages() tests */
+	
 	@Test
 	public void testGetCumulativePercentagesRealDataRange() {
 		KeyedValues result = DataUtilities.getCumulativePercentages(cumulativeValues);
@@ -345,33 +330,23 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testGetCumulativePercentagesRealDataIncrease() {
-		KeyedValues result = DataUtilities.getCumulativePercentages(cumulativeValues);
-		for (int i = 0; i < result.getItemCount(); i++) {
-			if (i > 0) {
-				double r1 = (double) result.getValue(i);
-				double r2 = (double) result.getValue(i-1);
-				assertTrue("Values should be between increasing", r1 > r2);
-			}
-		}
-	}
-	
-	@Test
 	public void testGetCumulativePercentagesEmptyData() {
 		KeyedValues result = DataUtilities.getCumulativePercentages(cumulativeEmpty);
 		assertEquals(0, result.getItemCount());
 	}
 	
-	@Test (expected = Error.class)
+	@Test (expected = IllegalArgumentException.class)
 	public void testGetCumulativePercentagesNullData() {
-		try {
-			DataUtilities.getCumulativePercentages(null);
-			fail("Test should not get to this point.");
-		} catch (Exception e) {
-			if (e.getClass() != InvalidParameterException.class) {
-				String error = "Test should throw InvalidParameterException, instead got " + e.getClass().toString(); 
-				assertFalse(error, true);
-			}
+		DataUtilities.getCumulativePercentages(null);
+		fail("Test should not get to this point.");
+	}
+	
+	@Test
+	public void testGetCumulativePercentagesNullValue() {
+		KeyedValues result = DataUtilities.getCumulativePercentages(cumulativeNullValue);
+		for (int i = 0; i < result.getItemCount(); i++) {
+			double r = (double) result.getValue(i);
+			assertEquals("Values should be NaN: " + r, true, Double.isNaN(r));
 		}
 	}
 }
