@@ -230,7 +230,7 @@ public class RangeTest{
 	@Test
 	public void testCombineRange2Null() {
 		Range result = Range.combine(testRange1, null);
-		assertEquals("Should get null.", null, result);
+		assertEquals(testRange1, result);
 	}
 	
 	@Test
@@ -345,7 +345,7 @@ public class RangeTest{
 	@Test
 	public void testEqualsUpperBoundEquality() {
 		Range temp = new Range(-1, 2);
-		assertTrue(testRange1.equals(temp));
+		assertFalse(testRange1.equals(temp));
 	}
 	
 	/* hashCode() tests */
