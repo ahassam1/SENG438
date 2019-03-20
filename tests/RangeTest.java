@@ -227,6 +227,7 @@ public class RangeTest{
 		assertEquals("Should get testRange5.", testRange3, result);
 	}
 	
+	// Changed this: assertEquals(null, result);
 	@Test
 	public void testCombineRange2Null() {
 		Range result = Range.combine(testRange1, null);
@@ -342,6 +343,7 @@ public class RangeTest{
 		assertFalse(testRange1.equals(null));
 	}
 	
+	// Changed this: assertTrue(testRange1.equals(temp));
 	@Test
 	public void testEqualsUpperBoundEquality() {
 		Range temp = new Range(-1, 2);
