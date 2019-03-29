@@ -1,4 +1,4 @@
-package org.jfree.data;
+package org.jfree.data.test;
 
 import static org.junit.Assert.*;
 
@@ -16,12 +16,14 @@ public class RangeTest{
 	private Range testRange1;
 	private Range testRange2;
 	private Range testRange3;
+	private Range testRange4;
 	
 	@Before
 	public void setUp() throws Exception {
 		testRange1 = new Range(-1, 1);
 		testRange2 = new Range(-2, 2);
 		testRange3 = new Range(4, 8);
+		testRange4 = new Range(1,1);
 		
 		boundRange = new Range(-1, 1);
 		boundRange2 = null;
@@ -299,6 +301,19 @@ public class RangeTest{
 		Range expected = new Range(-2, 0);
 		Range result = Range.shift(testRange1, -1);
 		assertEquals("Should have range(-2, 0)", expected, result);
+	}
+	@Test 
+	public void testShiftReturnsNoZeroCrossingUpper()
+	{
+		Range result = Range.shift(testRange4, 5);
+		assertTrue(result.getUpperBound() > 0);
+
+	}
+	@Test 
+	public void testShiftReturnsNoZeroCrossingLower()
+	{
+		Range result = Range.shift(testRange4, 5);
+		assertTrue(result.getLowerBound() > 0);
 	}
 	
 	/* shift(base, delta, allowZeroCrossing) tests */
