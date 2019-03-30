@@ -152,9 +152,21 @@ public class RangeTest{
 	}
 	
 	@Test
+	public void testContainsLowerBound() {
+		boolean result = testRange1.contains(-1);
+		assertEquals("The value of -1 should be in range.", true, result);
+	}
+	
+	@Test
 	public void testContainsWithinBound() {
 		boolean result = testRange1.contains(0);
 		assertEquals("The value of 0 should be in range.", true, result);
+	}
+	
+	@Test
+	public void testContainsUpperBound() {
+		boolean result = testRange1.contains(1);
+		assertEquals("The value of 1 should be in range.", true, result);
 	}
 	
 	@Test
@@ -190,9 +202,21 @@ public class RangeTest{
 	}
 	
 	@Test
+	public void testIntersectsPointUpperBound() {
+		boolean result = testRange2.intersects(2, 2);
+		assertEquals("The ranges should intersect.", false, result);
+	}
+	
+	@Test
 	public void testIntersectsPointLessThan() {
 		boolean result = testRange2.intersects(-3, -3);
 		assertEquals("The ranges shouldn't intersect.", false, result);
+	}
+	
+	@Test
+	public void testIntersectsPointLowerBound() {
+		boolean result = testRange2.intersects(-2, -2);
+		assertEquals("The ranges should intersect.", false, result);
 	}
 	
 	/* constrain() tests */
